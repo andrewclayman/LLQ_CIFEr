@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+.venv/
+venv/
+env/
+
+# Local price data (Pepperstone; not redistributed) and generated outputs
+data/
+results/
+*.csv

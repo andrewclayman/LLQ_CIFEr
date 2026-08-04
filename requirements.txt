@@ -1,0 +1,8 @@
+# Core
+numpy>=1.23
+pandas>=1.5
+scipy>=1.9
+
+# Backtesting engine used during LLQ strategy generation
+# (see prompt/llq_prompt.txt and the paper, Section III-A)
+vectorbt>=0.25
