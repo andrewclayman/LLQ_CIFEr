@@ -33,8 +33,22 @@ LLQ_CIFEr/
 │   ├── benchmarks.py                   # B3 MA Crossover, B4 Bollinger Breakout, B5 Donchian Breakout
 │   ├── mean_reversion_bands_daily.py   # B1 Mean Reversion Bands
 │   └── rsi_divergence_daily.py         # B2 RSI Divergence
-├── config.py                   # Transaction costs, asset classes, strategy manifest
+├── config.py                   # Transaction costs, asset classes, strategy manifest (Stage 1)
 ├── validate.py                 # Stage 1 out-of-sample walk-forward harness
+├── stage2_portfolio_ga/        # Stage 2 — portfolio-level genetic algorithm (Section III-C)
+│   ├── ga_engine.py                # GA: chromosome (strategy index + weight simplex), crossover, mutation, elitism
+│   ├── run_portfolio_ga.py         # Runner: one walk-forward period, precompute returns, evolve, evaluate OOS
+│   ├── multi_run_evaluator.py      # 50 GA runs per (period, variant) -> distributions for inference
+│   ├── hyperparameter_tuning.py    # Per-period Optuna TPE + median pruning
+│   ├── config.py                   # GA params, walk-forward periods, strategy registry, variant pools
+│   ├── strategies.py               # Maps a strategy index (genotype) to a signal generator (phenotype)
+│   ├── backtester.py               # Long-only signals -> P&L / Sharpe / drawdown
+│   ├── data_loader.py              # Loads + resamples daily OHLCV
+│   ├── per_strategy_eval.py        # Stage 1 per-strategy ranking (CIFER build)
+│   ├── generate_significance_tests_doc.py  # Mann-Whitney U, Holm-Bonferroni, Cohen's d, bootstrap, Kruskal-Wallis
+│   ├── plotting.py                 # Result figures
+│   ├── pseudocode.tex              # GA pseudocode
+│   └── GA_DESCRIPTION.md           # Prose description of the GA
 ├── requirements.txt
 └── README.md
 ```
@@ -92,6 +106,43 @@ plus summary tables by strategy, asset class, and period.
 > `data/test/<ASSET>/<asset>_<period>.csv` (e.g. `data/test/BTCUSD/btcusd_2023.csv`)
 > to re-run the harness. See `config.py` for the asset list and expected
 > transaction costs.
+
+## Stage 2 — portfolio genetic algorithm
+
+`stage2_portfolio_ga/` contains the portfolio-level GA of Section III-C. The GA
+jointly optimises, over the 19 assets, (i) which strategy runs on each asset and
+(ii) its capital weight (a point on the probability simplex), with fitness equal
+to the annualised Sharpe of the *combined* weighted portfolio (so inter-asset
+covariance and diversification matter). It is run under three pools — **Full**
+(LLM + benchmarks + Cash), **LLM-Only**, and **Benchmark-Only** — with per-period
+hyperparameters tuned by Optuna (TPE + median pruning) on a validation split that
+never sees the OOS test year.
+
+```bash
+pip install -r requirements.txt
+cd stage2_portfolio_ga
+
+# 1. Tune GA hyperparameters per period (Optuna)
+python hyperparameter_tuning.py
+
+# 2. 50 GA runs per (period, variant) -> distributions for statistical testing
+python multi_run_evaluator.py
+
+# A single period/variant GA run can also be launched directly:
+python run_portfolio_ga.py
+```
+
+Paths are anchored to the repo (no absolute paths); point the GA at your local
+daily data with the `LLQ_DATA_DIR` / `LLQ_TEST_SET_DIR` environment variables
+(same Pepperstone data note as above — not redistributed here). The strategy
+modules are loaded from the top-level `strategies/` directory.
+
+> **Note on scope.** `config.py` defines a 21-entry strategy registry (with
+> exploratory strategies the paper excludes) and **7** walk-forward windows
+> (2018–2025). The paper reports the **6** windows P1–P6 (2018–2024) and the
+> paper strategy pool; the variant index sets in `config.py`
+> (`ACTIVE_LLM_INDICES`, `PAPER_BENCHMARK_INDICES`) document exactly which
+> registry entries correspond to the paper's pools.
 
 ## Citation
 

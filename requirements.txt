@@ -6,3 +6,8 @@ scipy>=1.9
 # Backtesting engine used during LLQ strategy generation
 # (see prompt/llq_prompt.txt and the paper, Section III-A)
 vectorbt>=0.25
+
+# Stage 2 — portfolio genetic algorithm (stage2_portfolio_ga/)
+optuna>=3.0          # per-period hyperparameter tuning (TPE + median pruning)
+matplotlib>=3.5      # result plots (plotting.py)
+python-docx>=0.8     # optional: only for generate_significance_tests_doc.py

@@ -8,5 +8,12 @@ env/
 
 # Local price data (Pepperstone; not redistributed) and generated outputs
 data/
+test_sets/
 results/
+logs/
 *.csv
+
+# Stage 2 GA run artifacts
+*.db          # Optuna SQLite studies
+*.docx        # generated significance-tests document
+*.pptx

@@ -1,0 +1,112 @@
+\documentclass{article}
+\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=1.5cm]{geometry}
+
+\begin{document}
+
+\SetAlgoNlRelativeSize{-1}
+\setlength{\algomargin}{1em}
+\begin{algorithm}[H]
+\footnotesize
+\SetAlgoSkip{}
+\SetAlgoInsideSkip{smallskip}
+\caption{Evolutionary Strategy--Asset Weight Optimisation}\label{alg:es}
+\KwIn{Return matrix $R \in \mathbb{R}^{S \times A}$ where $S=16$ strategies, $A=19$ assets}
+\KwOut{Best portfolio allocation (weight, strategy) per asset}
+
+
+\tcp{Hyperparameters}
+$N \gets 100$\tcp*{Population size}
+$G \gets 300$\tcp*{Generations}
+$k \gets 2$\tcp*{Tournament size}
+$e \gets 3$\tcp*{Elites}
+$p_c \gets 0.6$\tcp*{Crossover rate}
+$p_w \gets 0.3$\tcp*{Weight mutation rate}
+$p_s \gets 0.03$\tcp*{Strategy mutation rate}
+$\sigma_w \gets 0.05$\tcp*{Weight perturbation magnitude}
+
+
+\tcp{Fitness function}
+\SetKwFunction{Fit}{Fitness}
+\SetKwProg{Fn}{Function}{:}{}
+\Fn{\Fit{individual}}{
+    \Return $\displaystyle\sum_{j=1}^{A} w_j \cdot R\bigl[s_j,\; j\bigr]$
+    where $(w_j, s_j)$ are the weight and strategy of asset $j$\;
+}
+
+
+\tcp{Initialise population}
+\For{$i \gets 1$ \KwTo $N$}{
+    $\mathbf{w} \gets \text{Simplex}(A)$\tcp*{Random weights summing to 1}
+    \For{$j \gets 1$ \KwTo $A$}{
+        $s_j \gets \text{RandInt}(1, S)$\;
+    }
+    $P_i \gets \{(w_j,\, s_j)\}_{j=1}^{A}$\;
+}
+
+
+\tcp{Evolution loop}
+\For{$g \gets 1$ \KwTo $G$}{
+
+    
+    \tcp{Tournament selection — fill mating pool}
+    $M \gets []$\;
+    \While{$|M| < N$}{
+        Draw $k$ individuals uniformly at random from $P$\;
+        Append the one with highest \Fit{} to $M$\;
+    }
+
+    
+    \tcp{Crossover and mutation}
+    $C \gets []$\;
+    \For{$i \gets 1$ \KwTo $|M|$ \textbf{step} $2$}{
+        $\text{parent}_1 \gets M_i$, \quad $\text{parent}_2 \gets M_{i+1}$\;
+
+        \eIf{$\text{Rand}(0,1) \leq p_c$}{
+            \tcp{Two-point crossover}
+            $c_1 \gets \text{RandInt}(1,\, A-1)$\;
+            $c_2 \gets \text{RandInt}(c_1+1,\, A)$\;
+            $\text{child}_1 \gets \text{parent}_1[1\!:\!c_1] \;\|\; \text{parent}_2[c_1\!:\!c_2] \;\|\; \text{parent}_1[c_2\!:\!A]$\;
+            $\text{child}_2 \gets \text{parent}_2[1\!:\!c_1] \;\|\; \text{parent}_1[c_1\!:\!c_2] \;\|\; \text{parent}_2[c_2\!:\!A]$\;
+        }{
+            $\text{child}_1 \gets \text{copy}(\text{parent}_1)$\;
+            $\text{child}_2 \gets \text{copy}(\text{parent}_2)$\;
+        }
+
+        
+        \tcp{Mutation}
+        \ForEach{$\text{child} \in \{\text{child}_1,\, \text{child}_2\}$}{
+            \For{$j \gets 1$ \KwTo $A$}{
+                \If{$\text{Rand}(0,1) \leq p_w$}{
+                    $w_j \gets w_j + \text{Rand}(-\sigma_w,\, \sigma_w)$\;
+                }
+                \If{$\text{Rand}(0,1) \leq p_s$}{
+                    $s_j \gets \text{RandInt}(1,\, S)$\;
+                }
+            }
+            \tcp{Simplex re-projection}
+            \For{$j \gets 1$ \KwTo $A$}{
+                $w_j \gets \max(w_j,\; 0)$\;
+            }
+            $Z \gets \sum_{j=1}^{A} w_j$\;
+            \For{$j \gets 1$ \KwTo $A$}{
+                $w_j \gets w_j \;/\; Z$\;
+            }
+        }
+        Append $\text{child}_1,\, \text{child}_2$ to $C$\;
+    }
+
+    
+    \tcp{Elitism + survivor selection}
+    Sort $P$ by \Fit{} descending\;
+    $P_{\text{elite}} \gets P[1:e]$\;
+    $P \gets P_{\text{elite}} \;\cup\; C[1 : N - e]$\;
+}
+
+
+\Return individual in $P$ with highest \Fit{}\;
+
+\end{algorithm}
+
+\end{document}
