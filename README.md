@@ -9,9 +9,10 @@ Prompts and generated strategy code for the paper:
 > Economics (CIFEr), 2026.
 
 This repository accompanies the paper and is provided for **reproducibility**.
-It contains (i) the exact prompt used to drive the agentic strategy-generation
-loop and (ii) the Python signal generators the agent produced, together with the
-benchmark strategies and the out-of-sample evaluation harness.
+It contains (i) the LLQ generation prompt used to drive the agentic
+strategy-generation loop and (ii) the Python signal generators the agent
+produced, together with the benchmark strategies and the out-of-sample
+evaluation harness.
 
 ---
 
