@@ -1,0 +1,28 @@
+{
+  "strategy_name": "Spectral Entropy Mean Reversion",
+  "novelty_claim": "Uses TRUE spectral entropy from FFT power spectrum with counter-intuitive logic: HIGH entropy = market inefficiency = mean reversion.",
+  "what_is_novel": [
+    "FFT-based spectral entropy (not Shannon entropy on returns)",
+    "Counter-intuitive: trade mean reversion during HIGH entropy",
+    "Adaptive thresholding based on recent entropy statistics",
+    "Opposite logic to conventional entropy strategies"
+  ],
+  "parameters": {
+    "fft_window": 60,
+    "threshold_window": 15,
+    "std_mult": 0.80
+  },
+  "dev_metrics": {
+    "sharpe_ratio": 1.34,
+    "positive_windows": 0.79,
+    "validation_method": "walk_forward"
+  },
+  "novelty_assessment": {
+    "is_novel": true,
+    "novelty_type": "Inverted logic on existing concept",
+    "key_innovation": "High entropy = inefficiency = mean reversion"
+  },
+  "method": "novel_discoveries",
+  "discovery_type": "pure_llm",
+  "discovery_source": "LLM discovered and implemented - human verified novelty only"
+}

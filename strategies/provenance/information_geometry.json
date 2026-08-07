@@ -1,0 +1,31 @@
+{
+  "strategy_name": "Information Geometry (Fisher-Rao)",
+  "novelty_claim": "Uses Fisher-Rao metric from information geometry to measure path curvature through distribution manifold for regime detection.",
+  "what_is_novel": [
+    "First use of Fisher-Rao distance for trading signals",
+    "Path curvature as regime stability measure",
+    "Differential geometry of probability distributions applied to finance",
+    "Exit on unstable regime (high curvature)"
+  ],
+  "parameters": {
+    "dist_window": 20,
+    "curvature_window": 18,
+    "n_bins": 10,
+    "curvature_percentile": 75,
+    "momentum_threshold": 0.001
+  },
+  "dev_metrics": {
+    "sharpe_ratio": 1.08,
+    "positive_windows": 0.58,
+    "validation_method": "walk_forward",
+    "n_windows": 36
+  },
+  "novelty_assessment": {
+    "is_novel": true,
+    "novelty_type": "Mathematical framework application (differential geometry)",
+    "key_innovation": "Fisher-Rao path curvature for regime stability detection"
+  },
+  "method": "novel_discoveries",
+  "discovery_type": "pure_llm",
+  "discovery_source": "LLM discovered, implemented, and optimized - Sharpe improved from 0.29 to 1.08"
+}

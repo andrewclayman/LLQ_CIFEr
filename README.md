@@ -32,7 +32,9 @@ LLQ_CIFEr/
 │   ├── hurst_regime_daily.py           # (8) Hurst Mean Reversion     — Fractal Analysis
 │   ├── benchmarks.py                   # B3 MA Crossover, B4 Bollinger Breakout, B5 Donchian Breakout
 │   ├── mean_reversion_bands_daily.py   # B1 Mean Reversion Bands
-│   └── rsi_divergence_daily.py         # B2 RSI Divergence
+│   ├── rsi_divergence_daily.py         # B2 RSI Divergence
+│   ├── PROVENANCE.md                   # Per-strategy discovery provenance (novelty, params, dev metrics)
+│   └── provenance/                     # Raw discovery-run summaries (where retained)
 ├── config.py                   # Transaction costs, asset classes, strategy manifest (Stage 1)
 ├── validate.py                 # Stage 1 out-of-sample walk-forward harness
 ├── stage2_portfolio_ga/        # Stage 2 — portfolio-level genetic algorithm (Section III-C)

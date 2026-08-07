@@ -1,0 +1,31 @@
+{
+  "strategy_name": "Rough Path Signatures",
+  "novelty_claim": "First application of rough path signatures (Terry Lyons, stochastic analysis) to trading. Uses signed area of (return, volatility) path to detect regimes.",
+  "what_is_novel": [
+    "Path signatures from rough path theory applied to trading",
+    "Signed area as regime detection metric",
+    "Coordinate-free, reparametrization-invariant path summary",
+    "Combines momentum (high signature) with mean-reversion (low signature)"
+  ],
+  "parameters": {
+    "window": 20,
+    "sig_thresh_high": 1.5,
+    "sig_thresh_low": 0.3,
+    "mom_window": 14,
+    "mom_thresh": 0.008,
+    "mr_thresh": 0.02
+  },
+  "dev_metrics": {
+    "sharpe_ratio": 1.08,
+    "validation_method": "walk_forward",
+    "data_period": "2021+"
+  },
+  "novelty_assessment": {
+    "is_novel": true,
+    "novelty_type": "Mathematical framework transfer (stochastic analysis to trading)",
+    "key_innovation": "Using path signature signed area for regime detection"
+  },
+  "method": "novel_discoveries",
+  "discovery_type": "pure_llm",
+  "discovery_source": "LLM proposed and implemented - human verified novelty only"
+}
