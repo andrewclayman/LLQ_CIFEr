@@ -137,12 +137,13 @@ daily data with the `LLQ_DATA_DIR` / `LLQ_TEST_SET_DIR` environment variables
 (same Pepperstone data note as above — not redistributed here). The strategy
 modules are loaded from the top-level `strategies/` directory.
 
-> **Note on scope.** `config.py` defines a 21-entry strategy registry (with
-> exploratory strategies the paper excludes) and **7** walk-forward windows
-> (2018–2025). The paper reports the **6** windows P1–P6 (2018–2024) and the
-> paper strategy pool; the variant index sets in `config.py`
-> (`ACTIVE_LLM_INDICES`, `PAPER_BENCHMARK_INDICES`) document exactly which
-> registry entries correspond to the paper's pools.
+> **Note on scope.** The default configuration reproduces the paper: **6**
+> walk-forward windows P1–P6 (2018–2024, Table II) and the paper strategy pool
+> (7 LLM strategies + 6 benchmarks + Cash, pinned by `ACTIVE_LLM_INDICES` /
+> `PAPER_BENCHMARK_INDICES`). The `STRATEGY_REGISTRY` retains a few extra,
+> unused entries (exploratory strategies not selected for the paper) purely for
+> provenance — they are not part of any variant pool. A 7th walk-forward window
+> (2025 OOS) is included as a commented-out optional extension.
 
 ## Citation
 
