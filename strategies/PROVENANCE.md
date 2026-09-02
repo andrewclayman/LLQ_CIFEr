@@ -5,7 +5,7 @@ record captures what the agent produced for that strategy: the mathematical
 domain, its novelty claim, the frozen parameters, and the walk-forward **dev**
 metric obtained during discovery.
 
-**Scope and honesty note.** These are *provenance* records, not a full per-backtest
+**Scope.** These are *provenance* records, not a full per-backtest
 audit trail. The strategies were discovered by the agent on **development data
 only** (test sets were withheld from the working directory), then frozen. The
 dev metrics below are the in-development walk-forward figures the agent reported
